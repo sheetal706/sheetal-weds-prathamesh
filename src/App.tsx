@@ -1,9 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Language } from "./types";
 import { translations, weddingEvents } from "./data";
 import MandalaCanvas from "./components/MandalaCanvas";
 import Countdown from "./components/Countdown";
-import AdminPanel from "./components/AdminPanel";
 import HorizontalGallery from "./components/HorizontalGallery";
 import SacredTimeline from "./components/SacredTimeline";
 import { motion, AnimatePresence, useScroll, useTransform } from "motion/react";
@@ -11,8 +10,6 @@ import { Calendar, MapPin, Sparkles, Clock, ArrowDown, ExternalLink, Heart } fro
 
 export default function App() {
   const [language, setLanguage] = useState<Language>(Language.ENGLISH);
-  const [blessings, setBlessings] = useState<any[]>([]);
-  const [isBlessingsLoading, setIsBlessingsLoading] = useState(false);
   const [imageSrc, setImageSrc] = useState("https://lh3.googleusercontent.com/d/1rlnzzeSOgPzS5GcipEFSTNe8oOtvFXl1");
 
   // Royal curtain state mapping to sessionStorage so subsequent visits bypass it optionally, but refresh allows testing!
@@ -44,25 +41,7 @@ export default function App() {
     setLanguage((prev) => (prev === Language.ENGLISH ? Language.KANNADA : Language.ENGLISH));
   };
 
-  // Fetch blessings from backend server API
-  const fetchBlessings = async () => {
-    setIsBlessingsLoading(true);
-    try {
-      const response = await fetch("/api/rsvp");
-      if (response.ok) {
-        const data = await response.json();
-        setBlessings(data);
-      }
-    } catch (e) {
-      console.error("Could not fetch blessings from Express API:", e);
-    } finally {
-      setIsBlessingsLoading(false);
-    }
-  };
 
-  useEffect(() => {
-    fetchBlessings();
-  }, []);
 
   return (
     <div className="relative min-h-screen font-sans bg-[#FCFAF5] text-[#2D2621] selection:bg-amber-100 selection:text-stone-900">
