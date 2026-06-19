@@ -12,21 +12,6 @@ export default function App() {
   const [language, setLanguage] = useState<Language>(Language.ENGLISH);
   const [imageSrc, setImageSrc] = useState("https://lh3.googleusercontent.com/d/1rlnzzeSOgPzS5GcipEFSTNe8oOtvFXl1");
 
-  // Royal curtain state mapping to sessionStorage so subsequent visits bypass it optionally, but refresh allows testing!
-  const [hasOpened, setHasOpened] = useState(() => {
-    if (typeof window !== "undefined") {
-      return sessionStorage.getItem("royal_invitation_opened") === "true";
-    }
-    return false;
-  });
-
-  const handleOpenInvitation = () => {
-    setHasOpened(true);
-    if (typeof window !== "undefined") {
-      sessionStorage.setItem("royal_invitation_opened", "true");
-    }
-  };
-
   const t = translations[language];
 
   // Framer Motion native Parallax coordinate hooks
@@ -46,134 +31,16 @@ export default function App() {
   return (
     <div className="relative min-h-screen font-sans bg-[#FCFAF5] text-[#2D2621] selection:bg-amber-100 selection:text-stone-900">
 
-      <AnimatePresence mode="wait">
-        {!hasOpened ? (
-          <motion.div
-            key="royal-portal-curtain"
-            initial={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-0 w-full h-full z-[100] flex flex-col items-center justify-center p-4 overflow-hidden bg-black"
-          >
-            {/* Left Splitting Door Velvet Curtain with elegant gold accents */}
-            <motion.div
-              initial={{ x: 0 }}
-              exit={{ x: "-100%" }}
-              transition={{ duration: 1.6, ease: [0.76, 0, 0.24, 1] }}
-              className="absolute left-0 top-0 bottom-0 w-1/2 z-0 border-r-2 border-amber-500/20"
-              style={{
-                background: "linear-gradient(90deg, #1A0303 0%, #300606 60%, #1c0404 100%)",
-                boxShadow: "inset -15px 0 50px rgba(0,0,0,0.85)"
-              }}
-            >
-              {/* Traditional gold pattern watermark on left page */}
-              <div className="absolute inset-0 opacity-[0.03] bg-[radial-gradient(#C5A059_2px,transparent_2px)] [background-size:30px_30px] pointer-events-none" />
-              {/* Gold tassel drop on screen center line */}
-              <div className="absolute right-0 top-0 bottom-0 w-px bg-gradient-to-b from-amber-500/40 via-amber-200/50 to-transparent pointer-events-none" />
-              <div className="absolute right-2 top-10 pointer-events-none text-amber-500/25 rotate-95 text-xs font-serif uppercase tracking-[0.3em]">
-                SHUBH SNEHA
-              </div>
-            </motion.div>
+      {/* 1. Procedural interactive canvas element drawing gold mandalas and drifting jasmine/saffron petals */}
+      <div className="fixed inset-0 w-full h-full pointer-events-none z-0">
+        <MandalaCanvas />
+      </div>
 
-            {/* Right Splitting Door Velvet Curtain with elegant gold accents */}
-            <motion.div
-              initial={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ duration: 1.6, ease: [0.76, 0, 0.24, 1] }}
-              className="absolute right-0 top-0 bottom-0 w-1/2 z-0 border-l-2 border-amber-500/20"
-              style={{
-                background: "linear-gradient(270deg, #1A0303 0%, #300606 60%, #1c0404 100%)",
-                boxShadow: "inset 15px 0 50px rgba(0,0,0,0.85)"
-              }}
-            >
-              {/* Traditional gold pattern watermark on right page */}
-              <div className="absolute inset-0 opacity-[0.03] bg-[radial-gradient(#C5A059_2px,transparent_2px)] [background-size:30px_30px] pointer-events-none" />
-              {/* Gold tassel drop on screen center line */}
-              <div className="absolute left-0 top-0 bottom-0 w-px bg-gradient-to-b from-amber-500/40 via-amber-200/50 to-transparent pointer-events-none" />
-              <div className="absolute left-2 bottom-10 pointer-events-none text-amber-500/25 -rotate-95 text-xs font-serif uppercase tracking-[0.3em]">
-                VIVAHA UTSAV
-              </div>
-            </motion.div>
+      {/* Background cinematic grid overlay simulating moving shimmering elements */}
+      <div className="fixed inset-0 w-full h-full bg-grid-reflection opacity-5 pointer-events-none z-0" />
 
-            {/* Glowing Golden Mandala rotating background for the center content box */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] sm:w-[700px] h-[550px] sm:h-[700px] border border-amber-500/10 rounded-full animate-spin-slow opacity-35 pointer-events-none z-1" />
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] sm:w-[450px] h-[350px] sm:h-[450px] border border-dashed border-amber-500/15 rounded-full animate-spin-slow opacity-45 pointer-events-none z-1" style={{ animationDirection: "reverse" }} />
-            
-            <motion.div
-              initial={{ scale: 0.92, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.85, opacity: 0, filter: "blur(12px)" }}
-              transition={{ delay: 0.1, duration: 0.8 }}
-              className="relative max-w-lg w-full text-center p-8 sm:p-12 border-2 border-amber-500/35 bg-gradient-to-b from-[#2A0606]/95 to-[#1c0404]/98 rounded-[36px] backdrop-blur-xl shadow-[0_0_80px_rgba(197,160,89,0.35)] gold-border-corner gold-border-corner-tl z-10"
-            >
-              {/* Extra elegant gold frame design */}
-              <div className="absolute inset-3 border border-amber-500/25 rounded-[28px] pointer-events-none gold-border-frame-all" />
-              <div className="absolute inset-4.5 border border-dashed border-amber-500/15 rounded-[26px] pointer-events-none" />
-              
-              {/* Royal Seal Badge */}
-              <div className="mb-6 inline-flex items-center gap-1.5 border border-amber-500/35 px-4.5 py-1.5 rounded-full bg-amber-500/10 text-[#C5A059] font-mono text-[9px] uppercase tracking-[0.3em] font-extrabold animate-pulse">
-                <Sparkles className="w-3 h-3 text-amber-400" />
-                {language === Language.ENGLISH ? "REGAL INVITATION" : "ರಾಜವಂಶದ ಆಮಂತ್ರಣ"}
-              </div>
-
-              {/* Shubh Vivah Stamp Ganesha Vector */}
-              <div className="flex justify-center mb-6 text-[#E5C158]">
-                <div className="w-16 h-16 rounded-full border border-double border-[#C5A059]/40 flex items-center justify-center bg-[#330C0C]/80 shadow-[0_0_15px_rgba(197,160,89,0.2)]">
-                  <Heart className="w-7 h-7 fill-[#C5A059]/10 text-[#C5A059]" />
-                </div>
-              </div>
-
-              {/* Majestic Kannada Title header with legendary calligraphy drop shadow */}
-              <h2 className="text-4xl sm:text-5xl font-kannada font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#F7E5C0] via-[#C5A059] to-[#F7E5C0] leading-tight select-none mb-1 drop-shadow-[0_4px_16px_rgba(197,160,89,0.25)] filter saturate-125">
-                ಶುಭ ವಿವಾಹ
-              </h2>
-              
-              {/* Small script connector */}
-              <p className="text-amber-500/70 font-script text-2xl sm:text-3xl my-3 italic select-none">
-                the royal union of
-              </p>
-
-              {/* English names with luxurious spacing */}
-              <h1 className="text-2xl sm:text-4xl font-display text-transparent bg-clip-text bg-gradient-to-r from-[#FFFEEF] via-[#E2C27F] to-[#E5C158] uppercase tracking-[0.22em] font-black select-none leading-none drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)]">
-                Sheethal
-              </h1>
-              <span className="text-stone-400 font-serif lowercase italic text-base my-1.5 block">
-                &
-              </span>
-              <h1 className="text-2xl sm:text-4xl font-display text-transparent bg-clip-text bg-gradient-to-r from-[#FFFEEF] via-[#E2C27F] to-[#E5C158] uppercase tracking-[0.22em] font-black select-none leading-none drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)] mb-8">
-                Prathamesh
-              </h1>
-
-              {/* Invitation Entrance Button */}
-              <motion.button
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={handleOpenInvitation}
-                className="w-full py-4 px-8 bg-gradient-to-r from-[#A67C1E] via-[#C5A059] to-[#8A6414] hover:from-[#C5A059] hover:to-[#A67C1E] text-stone-900 border border-[#FFFAD0]/30 font-display font-bold text-xs uppercase tracking-[0.25em] rounded-full shadow-[0_8px_30px_rgba(197,160,89,0.3)] hover:shadow-[0_12px_40px_rgba(197,160,89,0.5)] cursor-pointer text-white flex items-center justify-center gap-2 group transition-all duration-300 select-none pb-4.5"
-              >
-                <span>{language === Language.ENGLISH ? "Open Invitation" : "ಲಗ್ನ ಪತ್ರಿಕೆ ತೆರೆಯಿರಿ"}</span>
-                <Sparkles className="w-4 h-4 text-white group-hover:animate-spin" />
-              </motion.button>
-            </motion.div>
-          </motion.div>
-        ) : (
-          <motion.div
-            key="royal-wedding-invitation-main"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1 }}
-            className="w-full"
-          >
-            {/* 1. Procedural interactive canvas element drawing gold mandalas and drifting jasmine/saffron petals */}
-            <div className="fixed inset-0 w-full h-full pointer-events-none z-0">
-              <MandalaCanvas />
-            </div>
-
-            {/* Background cinematic grid overlay simulating moving shimmering elements */}
-            <div className="fixed inset-0 w-full h-full bg-grid-reflection opacity-5 pointer-events-none z-0" />
-
-            {/* Core Website Flow */}
-            <div className="relative z-10 flex flex-col items-center w-full min-h-screen">
+      {/* Core Website Flow */}
+      <div className="relative z-10 flex flex-col items-center w-full min-h-screen">
 
           {/* ================= HERO SECTION ================= */}
         <section 
@@ -560,9 +427,6 @@ export default function App() {
         </footer>
 
       </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
   );
 }
